@@ -1,0 +1,3 @@
+__debug_*
+cmd/cmd
+cmd/*

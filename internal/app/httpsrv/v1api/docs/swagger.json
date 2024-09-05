@@ -1,0 +1,207 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a server",
+        "title": "Watwell alerts API",
+        "contact": {
+            "name": "API Support"
+        },
+        "version": "v1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/v1",
+    "paths": {
+        "/info": {
+            "get": {
+                "description": "info",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "info"
+                ],
+                "summary": "info",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/v1api.infoResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/ticket/list": {
+            "post": {
+                "description": "User list",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tickets"
+                ],
+                "summary": "user list",
+                "parameters": [
+                    {
+                        "description": "request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1api.ticketListRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/v1api.ticketListResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/httpresp.ErrResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/httpresp.ErrResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/httpresp.ErrResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "domain.Ticket": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "key": {
+                    "type": "string"
+                },
+                "queue": {
+                    "type": "string"
+                },
+                "summary": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "fwerr.Code": {
+            "type": "string",
+            "enum": [
+                "INTERNAL_ERROR",
+                "AUTH_ERROR",
+                "FORBIDDEN",
+                "DB_ERROR",
+                "BAD_REQUEST",
+                "NOT_FOUND"
+            ],
+            "x-enum-varnames": [
+                "CodeInternalError",
+                "CodeAuthError",
+                "CodeForbidden",
+                "CodeDBError",
+                "CodeBadRequest",
+                "CodeNotFound"
+            ]
+        },
+        "httpresp.ErrResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "$ref": "#/definitions/fwerr.Code"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "v1api.infoResponse": {
+            "type": "object",
+            "properties": {
+                "commit_sha": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                }
+            }
+        },
+        "v1api.ticketListRequest": {
+            "type": "object",
+            "properties": {
+                "filter": {
+                    "$ref": "#/definitions/v1api.ticketListRequestFilter"
+                },
+                "offset": {
+                    "type": "integer"
+                },
+                "size": {
+                    "type": "integer"
+                }
+            }
+        },
+        "v1api.ticketListRequestFilter": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string"
+                }
+            }
+        },
+        "v1api.ticketListResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "data": {
+                    "$ref": "#/definitions/v1api.ticketListResponseData"
+                }
+            }
+        },
+        "v1api.ticketListResponseData": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Ticket"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        }
+    },
+    "externalDocs": {
+        "description": "wiki.yandex.ru",
+        "url": "https://wiki.yandex.ru/"
+    }
+}
